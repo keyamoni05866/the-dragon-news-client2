@@ -1,4 +1,4 @@
-import React from "react";
+
 import logo from "../../../assets/logo.png";
 import moment from "moment";
 import Button from "react-bootstrap/Button";
@@ -7,8 +7,21 @@ import Marquee from "react-fast-marquee";
 import "./Header.css";
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
-import NavDropdown from 'react-bootstrap/NavDropdown';
+import { Link } from "react-router-dom";
+import { FaUserCircle } from "react-icons/fa";
+
+import { AuthContext } from "../../../Providers/AuthProviders";
+import React, { useContext } from "react";
+
+
 const Header = () => {
+  const {user,   logOut} = useContext(AuthContext);
+const handleLogOut = () =>{
+  logOut()
+  .then(() =>{})
+  .catch(error => console.log(error))
+}
+
   return (
     <Container>
       <div className="text-center">
@@ -33,19 +46,26 @@ const Header = () => {
           <Navbar.Toggle aria-controls="responsive-navbar-nav" />
           <Navbar.Collapse id="responsive-navbar-nav">
             <Nav className="mx-auto">
-              <Nav.Link href="#features">Home</Nav.Link>
+                <Link to="/category/0">Home</Link>
+             
               <Nav.Link href="#pricing">About</Nav.Link>
               <Nav.Link href="#pricing">Career</Nav.Link>
             </Nav>
             <Nav>
-              <Nav.Link href="#deets">Profile</Nav.Link>
-              <Nav.Link eventKey={2} href="#memes">
-              <Button variant="secondary py-2 px-3">Login</Button>
-              </Nav.Link>
+            {user && 
+              <FaUserCircle style={{fontSize:"2rem"}}></FaUserCircle>
+          }
+             
+             {user ? <Button onClick={handleLogOut} variant="secondary py-2 px-3">Log Out</Button>:
+              <Link to="/login"><Button variant="secondary py-2 px-3">Login</Button></Link>
+              }
+              
             </Nav>
           </Navbar.Collapse>
         </Container>
       </Navbar>
+
+      
     </Container>
   );
 };
